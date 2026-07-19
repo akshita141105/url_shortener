@@ -14,6 +14,7 @@ app.use(cookieParser());
 const allowedOrigins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://url-shortener-chi-drab.vercel.app",
 ];
 
 app.use(

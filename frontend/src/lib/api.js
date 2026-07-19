@@ -29,11 +29,13 @@ api.interceptors.response.use(
         }
 
         // Don't try to refresh if the failing request WAS the refresh call itself,
-        // or the login/register calls - those failing 401 just means bad credentials.
+        // the login/register calls (bad credentials, not expired session),
+        // or the "who am I" check (401 here just means "not logged in yet").
         if (
             originalRequest.url?.includes("/auth/refresh") ||
             originalRequest.url?.includes("/auth/login") ||
-            originalRequest.url?.includes("/auth/register")
+            originalRequest.url?.includes("/auth/register") ||
+            originalRequest.url?.includes("/auth/me")
         ) {
             return Promise.reject(error);
         }
@@ -59,8 +61,12 @@ api.interceptors.response.use(
         } catch (refreshError) {
             processQueue(refreshError);
 
-            // Refresh token itself is invalid/expired - send user to login
-            if (typeof window !== "undefined") {
+            // Refresh token itself is invalid/expired - send user to login.
+            // Guard against redirect loop if already on the login page.
+            if (
+                typeof window !== "undefined" &&
+                window.location.pathname !== "/login"
+            ) {
                 window.location.href = "/login";
             }
 

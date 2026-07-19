@@ -1,0 +1,16 @@
+# VS Code
+.vscode/
+
+# Node modules
+backend/node_modules/
+frontend/node_modules/
+
+# Environment files
+backend/.env
+frontend/.env.local
+
+# Next.js
+frontend/.next/
+
+# Logs
+*.log

@@ -10,4 +10,4 @@ export const deleteUrl = (shortCode) =>
     api.delete(`/urls/${shortCode}`);
 
 export const getAnalytics = (shortCode) =>
-    api.get(`/urls/${shortCode}/analytics`);s
+    api.get(`/urls/${shortCode}/analytics`);

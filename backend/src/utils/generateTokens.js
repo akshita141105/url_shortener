@@ -1,30 +1,29 @@
+/**
+ * Token generation utility for creating JWT tokens
+ * Stores refresh token in database for token rotation validation
+ */
 import User from "../models/User.js";
-import ApiError from "./ApiError.js";
-import { StatusCodes } from "http-status-codes";
 
+/**
+ * Generate access and refresh tokens for a user
+ * @param {string} userId - MongoDB user ID
+ * @returns {Promise<{accessToken: string, refreshToken: string}>}
+ */
 const generateTokens = async (userId) => {
     const user = await User.findById(userId);
 
     if (!user) {
-        throw new ApiError(
-            StatusCodes.NOT_FOUND,
-            "User not found"
-        );
+        throw new Error("User not found");
     }
 
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
+    // Store refresh token in database for validation
     user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
 
-    await user.save({
-        validateBeforeSave: false,
-    });
-
-    return {
-        accessToken,
-        refreshToken,
-    };
+    return { accessToken, refreshToken };
 };
 
 export default generateTokens;

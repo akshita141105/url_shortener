@@ -1,32 +1,20 @@
-import express from 'express'
+import express from 'express';
 import {
     createShortUrl,
     getAllUrls,
-    deleteUrl,
-    // getUrlAnalytics,
-    redirectToOriginalUrl
+    deleteUrl
 } from '../controllers/urlController.js';
-import errorHandler from '../middlewares/errorMiddleware.js';
 import authMiddleware from "../middlewares/authMiddleware.js";
+import { validateUrlCreation } from '../middlewares/validationMiddleware.js';
 
 const router = express.Router();
 
-
-router.post("/", authMiddleware, createShortUrl);
-
+// Protected routes - require authentication
+router.post("/", authMiddleware, validateUrlCreation, createShortUrl);
 router.get("/", authMiddleware, getAllUrls);
+router.delete("/:shortCode", authMiddleware, deleteUrl);
 
-router.delete(
-    "/:shortCode",
-    authMiddleware,
-    deleteUrl
-);
-
-// router.get(
-//     "/:shortCode/analytics",
-//     authMiddleware,
-//     getUrlAnalytics
-// );
-// router.get("/:shortCode", redirectToOriginalUrl);
+// Analytics endpoint (placeholder for future implementation)
+// router.get("/:shortCode/analytics", authMiddleware, getUrlAnalytics);
 
 export default router;

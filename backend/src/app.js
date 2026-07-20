@@ -30,18 +30,30 @@ app.use(
     })
 );
 
-
-app.use('/api/urls',urlRoutes);
-app.get("/:shortCode",redirectToOriginalUrl);
-app.use("/api/auth", authRoutes);
-
-app.use(errorHandler);
-
-app.get("/",(req,res) => {
+// Health check endpoint
+app.get("/", (req, res) => {
     res.json({
-        success:true,
-        message:"URL Shortener API is running",
+        success: true,
+        message: "URL Shortener API is running",
     });
 });
+
+// API Routes
+app.use('/api/urls', urlRoutes);
+app.use("/api/auth", authRoutes);
+
+// Redirect route (must be last to avoid conflicts)
+app.get("/:shortCode", redirectToOriginalUrl);
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Route not found",
+    });
+});
+
+// Error handler middleware (must be last)
+app.use(errorHandler);
 
 export default app;

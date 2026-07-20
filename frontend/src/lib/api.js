@@ -1,5 +1,9 @@
 import axios from "axios";
 
+/**
+ * Axios instance with automatic token refresh on 401
+ * Handles authentication token refresh without requiring user re-login
+ */
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     withCredentials: true,
@@ -10,6 +14,10 @@ const api = axios.create({
 let isRefreshing = false;
 let pendingQueue = [];
 
+/**
+ * Process queued requests after token refresh
+ * @param {Error|null} error - Error if refresh failed
+ */
 const processQueue = (error) => {
     pendingQueue.forEach(({ resolve, reject }) => {
         if (error) reject(error);

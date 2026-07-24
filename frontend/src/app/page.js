@@ -176,10 +176,31 @@ export default function Home() {
   };
 
   // While checking auth status, or if not logged in (about to redirect), show nothing/loading
+  // While checking auth status, or if not logged in (about to redirect), show skeleton
   if (authLoading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="spinner" />
+      <div className="min-h-screen flex flex-col">
+        <header className="pt-16 pb-8 md:pt-24 md:pb-12 text-center px-4">
+          <div className="inline-flex items-center gap-3 mb-4">
+            <span className="text-4xl">🔗</span>
+            <div className="skeleton" style={{ width: 180, height: 48, borderRadius: 8 }} />
+          </div>
+          <div className="skeleton skeleton-subtitle" style={{ margin: "12px auto 0", width: 260 }} />
+        </header>
+
+        <main className="flex-1 w-full max-w-2xl mx-auto px-4 pb-16">
+          <div className="glass-card p-6 md:p-8 mb-8">
+            <div className="space-y-4">
+              <div className="skeleton skeleton-input" />
+              <div className="skeleton skeleton-btn" />
+            </div>
+          </div>
+
+          <div className="glass-card p-10 text-center">
+            <div className="skeleton" style={{ width: "40%", height: 20, margin: "0 auto 12px" }} />
+            <div className="skeleton" style={{ width: "60%", height: 14, margin: "0 auto" }} />
+          </div>
+        </main>
       </div>
     );
   }

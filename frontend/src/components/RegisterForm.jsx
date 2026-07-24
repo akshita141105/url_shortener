@@ -5,6 +5,27 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
+import toast from "react-hot-toast";
+
+function RegisterSkeleton() {
+    return (
+        <div className="glass-card w-full max-w-md p-8">
+            <div className="skeleton skeleton-title" />
+            <div className="skeleton skeleton-subtitle" />
+
+            <div className="space-y-4">
+                <div className="skeleton skeleton-input" />
+                <div className="skeleton skeleton-input" />
+                <div className="skeleton skeleton-input" />
+                <div className="skeleton skeleton-btn" />
+            </div>
+
+            <div style={{ marginTop: 24 }}>
+                <div className="skeleton skeleton-text-sm" />
+            </div>
+        </div>
+    );
+}
 
 export default function RegisterForm() {
     const {
@@ -25,11 +46,11 @@ export default function RegisterForm() {
 
             await registerUser(data);
 
-            alert("Registration successful");
+            toast.success("Registration successful! Please log in.");
 
             router.push("/login");
         } catch (err) {
-            alert(
+            toast.error(
                 err.response?.data?.message ||
                 "Registration failed"
             );
@@ -37,6 +58,10 @@ export default function RegisterForm() {
             setLoading(false);
         }
     };
+
+    if (loading) {
+        return <RegisterSkeleton />;
+    }
 
     return (
         <div className="glass-card w-full max-w-md p-8">
@@ -108,12 +133,9 @@ export default function RegisterForm() {
                 </div>
 
                 <button
-                    disabled={loading}
                     className="btn-primary w-full"
                 >
-                    {loading
-                        ? "Creating Account..."
-                        : "Register"}
+                    Register
                 </button>
             </form>
 

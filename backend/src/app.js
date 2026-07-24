@@ -5,9 +5,11 @@ import { redirectToOriginalUrl } from './controllers/urlController.js';
 import errorHandler from './middlewares/errorMiddleware.js';
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
+import { redirectLimiter } from "./middlewares/rateLimiter.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -43,7 +45,7 @@ app.use('/api/urls', urlRoutes);
 app.use("/api/auth", authRoutes);
 
 // Redirect route (must be last to avoid conflicts)
-app.get("/:shortCode", redirectToOriginalUrl);
+app.get("/:shortCode", redirectLimiter, redirectToOriginalUrl);
 
 // 404 handler
 app.use((req, res) => {

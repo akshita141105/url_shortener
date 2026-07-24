@@ -5,6 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast"; 
+
 
 function LoginSkeleton() {
     return (
@@ -45,9 +47,11 @@ export default function LoginForm() {
 
             await login(data);
 
+            toast.success("Welcome back!");
+
             router.push("/");
         } catch (error) {
-            alert(
+            toast.error(
                 error.response?.data?.message ||
                 "Login failed"
             );
@@ -169,4 +173,4 @@ export default function LoginForm() {
 
         </div>
     );
-}
+}

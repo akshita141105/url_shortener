@@ -6,6 +6,25 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
+function LoginSkeleton() {
+    return (
+        <div className="glass-card w-full max-w-md p-8">
+            <div className="skeleton skeleton-title" />
+            <div className="skeleton skeleton-subtitle" />
+
+            <div className="space-y-4">
+                <div className="skeleton skeleton-input" />
+                <div className="skeleton skeleton-input" />
+                <div className="skeleton skeleton-btn" />
+            </div>
+
+            <div style={{ marginTop: 24 }}>
+                <div className="skeleton skeleton-text-sm" />
+            </div>
+        </div>
+    );
+}
+
 export default function LoginForm() {
     const {
         register,
@@ -36,6 +55,10 @@ export default function LoginForm() {
             setLoading(false);
         }
     };
+
+    if (loading) {
+        return <LoginSkeleton />;
+    }
 
     return (
         <div className="glass-card w-full max-w-md p-8">
@@ -128,11 +151,9 @@ export default function LoginForm() {
                 </div>
 
                 <button
-                    disabled={loading}
                     className="btn-primary w-full flex items-center justify-center gap-2"
                 >
-                    {loading && <span className="spinner" />}
-                    {loading ? "Signing In..." : "Login"}
+                    Login
                 </button>
             </form>
 
@@ -148,4 +169,4 @@ export default function LoginForm() {
 
         </div>
     );
-}
+}
